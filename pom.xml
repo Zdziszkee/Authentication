@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>me.zdziszkee</groupId>
+    <artifactId>Authentication</artifactId>
+    <version>1.0</version>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
+    <repositories>
+
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+        <repository>
+            <id>codemc-repo</id>
+            <url>https://repo.codemc.io/repository/maven-public/</url>
+        </repository>
+
+    </repositories>
+
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.16</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot</artifactId>
+            <version>1.8.8-R0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.slighterr12</groupId>
+            <artifactId>SimpleJSONConfig</artifactId>
+            <version>32e62403f6</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+    <build>
+        <!--Tell maven what plugins we want to add and what they should do-->
+        <plugins>
+            <!--Tell maven the id and version of the 'shade' plugin's jar file so it can download it from a repository-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <!--Tell the shade plugin when it should be run during a maven build-->
+                    <execution>
+                        <!--Tell the shade plugin to run once during the 'package' phase of a maven build-->
+                        <phase>package</phase>
+                        <!--Tell the shade plugin which of it's goals to attempt to run during this phase-->
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <!--Tell the shade plugin which of it's goals to attempt to run during this phase-->
+                        <configuration>
+                            <!--Tell the shade plugin where to put our jar file-->
+                            <outputFile>${project.basedir}/Server/plugins/${project.artifactId}.jar</outputFile>
+                            <minimizeJar>true</minimizeJar>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+        <!--Tell maven to enable resource filtering so we can use macros like '${project.version}' inside of our plugin.yml-->
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
+
+</project>
