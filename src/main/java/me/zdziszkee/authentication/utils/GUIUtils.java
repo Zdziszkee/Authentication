@@ -1,4 +1,4 @@
-package me.zdziszkee.wyscore.utils;
+package me.zdziszkee.authentication.utils;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
@@ -10,6 +10,7 @@ public class GUIUtils {
         ItemStack itemStack = new ItemStack(Material.STAINED_GLASS_PANE,1,(short) id);
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.addItemFlags(ItemFlag.values());
+        itemMeta.setDisplayName(" ");
         itemStack.setItemMeta(itemMeta);
         return itemStack;
     }

@@ -19,7 +19,6 @@ public class Authentication extends JavaPlugin {
     private GeneralConfiguration generalConfiguration;
     private PlayerKicker playerKicker;
     private static Authentication authentication;
-
     @Override
     public void onEnable() {
         SimpleJSONConfig.INSTANCE.register(this);
@@ -33,13 +32,15 @@ public class Authentication extends JavaPlugin {
         authentication = this;
     }
 
+
+
     public static Authentication getInstance() {
         return authentication;
     }
 
     private void registerEvents() {
         Bukkit.getPluginManager().registerEvents(new GUIListener(), this);
-        Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(patternFinderAuthGUIConfiguration, pinPadAuthGUIConfiguration, puzzleAuthGUIConfiguration, playerKicker), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(patternFinderAuthGUIConfiguration, pinPadAuthGUIConfiguration, puzzleAuthGUIConfiguration, generalConfiguration,playerKicker), this);
     }
 
 

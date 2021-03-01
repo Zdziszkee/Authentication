@@ -1,6 +1,6 @@
 package me.zdziszkee.authentication.gui;
 
-import me.zdziszkee.wyscore.utils.SkullCreator;
+import me.zdziszkee.authentication.utils.SkullCreator;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;

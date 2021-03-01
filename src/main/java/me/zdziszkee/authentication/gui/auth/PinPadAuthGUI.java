@@ -2,8 +2,11 @@ package me.zdziszkee.authentication.gui.auth;
 
 
 import me.zdziszkee.authentication.Authentication;
+import me.zdziszkee.authentication.configuration.GeneralConfiguration;
 import me.zdziszkee.authentication.configuration.PinPadAuthGUIConfiguration;
 import me.zdziszkee.authentication.gui.GUI;
+import me.zdziszkee.authentication.utils.Coordinates;
+import me.zdziszkee.authentication.utils.SpaceUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -11,6 +14,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 
 import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
@@ -23,11 +27,13 @@ public class PinPadAuthGUI implements GUI {
     private final byte[] inputs = new byte[]{-1, -1, -1, -1, -1};
     private final Player player;
     private final PlayerKicker playerKicker;
-    public PinPadAuthGUI(PinPadAuthGUIConfiguration pinPadAuthGUIConfiguration, Player player,PlayerKicker playerKicker) {
+    private final GeneralConfiguration generalConfiguration;
+    public PinPadAuthGUI(PinPadAuthGUIConfiguration pinPadAuthGUIConfiguration, Player player,PlayerKicker playerKicker,GeneralConfiguration generalConfiguration) {
         this.player = player;
         this.pinPadAuthGUIConfiguration = pinPadAuthGUIConfiguration;
         this.inventory = Bukkit.createInventory(this, 54, ChatColor.translateAlternateColorCodes('&', pinPadAuthGUIConfiguration.getInventoryName()));
         this.playerKicker = playerKicker;
+        this.generalConfiguration = generalConfiguration;
     }
 
     @Override
@@ -52,11 +58,19 @@ public class PinPadAuthGUI implements GUI {
         if (slot == 42) {
             StringBuilder stringBuilder = new StringBuilder();
             for (byte input : inputs) {
+                if (input==-1)continue;
                 stringBuilder.append(input);
             }
             int inputPin = Integer.parseInt(stringBuilder.toString());
             if (inputPin == generatedPin) {
-                Bukkit.broadcastMessage("correct pin");
+                player.closeInventory();
+                Coordinates velocity = generalConfiguration.getSpaceVelocity();
+                player.setVelocity(new Vector(velocity.getX(),velocity.getY(),velocity.getZ()));
+                Bukkit.getScheduler().runTaskLater(Authentication.getInstance(), () -> {
+                    SpaceUtil.connect(player,generalConfiguration.getSeverNameForTeleporting(),Authentication.getInstance());
+
+                },20L*generalConfiguration.getSpaceTeleportDelayInSeconds());
+
             } else {
                 playerKicker.kickPlayer(player);
             }

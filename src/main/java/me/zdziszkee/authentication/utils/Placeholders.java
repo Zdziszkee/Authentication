@@ -1,4 +1,4 @@
-package me.zdziszkee.wyscore.utils;
+package me.zdziszkee.authentication.utils;
 
 public class Placeholders {
     public static String AMOUNT = "%amount%";

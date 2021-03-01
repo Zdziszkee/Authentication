@@ -12,7 +12,7 @@ import org.bukkit.inventory.InventoryHolder;
 public class GUIListener implements Listener {
     @EventHandler
     public void onGUIClick(InventoryClickEvent event) {
-        Inventory inventory = event.getInventory();
+        Inventory inventory = event.getClickedInventory();
         if (inventory == null) return;
         InventoryHolder inventoryHolder = inventory.getHolder();
         if (inventoryHolder == null) return;

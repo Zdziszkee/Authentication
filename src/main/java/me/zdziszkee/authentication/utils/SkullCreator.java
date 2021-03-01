@@ -1,4 +1,4 @@
-package me.zdziszkee.wyscore.utils;
+package me.zdziszkee.authentication.utils;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;

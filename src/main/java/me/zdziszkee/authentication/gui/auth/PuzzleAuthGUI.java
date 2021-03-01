@@ -1,10 +1,13 @@
 package me.zdziszkee.authentication.gui.auth;
 
 import me.zdziszkee.authentication.Authentication;
+import me.zdziszkee.authentication.configuration.GeneralConfiguration;
 import me.zdziszkee.authentication.configuration.PuzzleAuthGUIConfiguration;
 
 import me.zdziszkee.authentication.gui.GUI;
-import me.zdziszkee.wyscore.utils.GUIUtils;
+import me.zdziszkee.authentication.utils.Coordinates;
+import me.zdziszkee.authentication.utils.GUIUtils;
+import me.zdziszkee.authentication.utils.SpaceUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -13,6 +16,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -26,6 +30,7 @@ public class PuzzleAuthGUI implements GUI {
     private final PuzzleAuthGUIConfiguration puzzleAuthGUIConfiguration;
     private final static Map<Integer, Integer> slotMap = new HashMap<>();
     private final PlayerKicker playerKicker;
+    private final GeneralConfiguration generalConfiguration;
     private final static int[] patternSlotPool = new int[]{
             18,
             19,
@@ -82,11 +87,12 @@ public class PuzzleAuthGUI implements GUI {
             -1, -1, -1, -1, -1, -1, -1, -1
     };
 
-    public PuzzleAuthGUI(Player player, PuzzleAuthGUIConfiguration puzzleAuthGUIConfiguration,PlayerKicker playerKicker) {
+    public PuzzleAuthGUI(Player player, PuzzleAuthGUIConfiguration puzzleAuthGUIConfiguration,PlayerKicker playerKicker,GeneralConfiguration generalConfiguration) {
         this.player = player;
         this.puzzleAuthGUIConfiguration = puzzleAuthGUIConfiguration;
         this.inventory = Bukkit.createInventory(this, 54, ChatColor.translateAlternateColorCodes('&', puzzleAuthGUIConfiguration.getInventoryName()));
         this.playerKicker = playerKicker;
+        this.generalConfiguration = generalConfiguration;
 
     }
 
@@ -108,6 +114,13 @@ public class PuzzleAuthGUI implements GUI {
         if (slot ==5){
             if (isPatternCorrect()) {
                 player.closeInventory();
+                Coordinates velocity = generalConfiguration.getSpaceVelocity();
+                player.setVelocity(new Vector(velocity.getX(),velocity.getY(),velocity.getZ()));
+                Bukkit.getScheduler().runTaskLater(Authentication.getInstance(), () -> {
+                    SpaceUtil.connect(player,generalConfiguration.getSeverNameForTeleporting(),Authentication.getInstance());
+
+                },20L*generalConfiguration.getSpaceTeleportDelayInSeconds());
+
             }else{
                 playerKicker.kickPlayer(player);
             }

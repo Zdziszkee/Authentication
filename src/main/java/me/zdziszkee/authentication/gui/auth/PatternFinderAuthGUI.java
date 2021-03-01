@@ -2,9 +2,12 @@ package me.zdziszkee.authentication.gui.auth;
 
 
 import me.zdziszkee.authentication.Authentication;
+import me.zdziszkee.authentication.configuration.GeneralConfiguration;
 import me.zdziszkee.authentication.configuration.PatternFinderAuthGUIConfiguration;
 import me.zdziszkee.authentication.gui.GUI;
-import me.zdziszkee.wyscore.utils.GUIUtils;
+import me.zdziszkee.authentication.utils.Coordinates;
+import me.zdziszkee.authentication.utils.GUIUtils;
+import me.zdziszkee.authentication.utils.SpaceUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -12,6 +15,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -24,6 +28,7 @@ public class PatternFinderAuthGUI implements GUI {
     private final Player player;
     private final PlayerKicker playerKicker;
     private final PatternFinderAuthGUIConfiguration patternFinderGUIConfiguration;
+    private final GeneralConfiguration generalConfiguration;
     private final Set<Integer> generatedGreenGlassSlots = new HashSet<>();
     private final int[] inputGreenSlots = new int[]{
             -1,
@@ -51,7 +56,14 @@ public class PatternFinderAuthGUI implements GUI {
         }
         if (slot == 23) {
             if (isPatternCorrect()) {
-                Bukkit.broadcastMessage("pattern is correct");
+                player.closeInventory();
+                Coordinates velocity = generalConfiguration.getSpaceVelocity();
+                player.setVelocity(new Vector(velocity.getX(),velocity.getY(),velocity.getZ()));
+                Bukkit.getScheduler().runTaskLater(Authentication.getInstance(), () -> {
+                    SpaceUtil.connect(player,generalConfiguration.getSeverNameForTeleporting(),Authentication.getInstance());
+
+                },20L*generalConfiguration.getSpaceTeleportDelayInSeconds());
+
             } else {
                 playerKicker.kickPlayer(player);
             }
@@ -70,11 +82,12 @@ public class PatternFinderAuthGUI implements GUI {
         }
     }
 
-    public PatternFinderAuthGUI(Player player, PatternFinderAuthGUIConfiguration patternFinderGUIConfiguration, PlayerKicker playerKicker) {
+    public PatternFinderAuthGUI(Player player, PatternFinderAuthGUIConfiguration patternFinderGUIConfiguration, PlayerKicker playerKicker,GeneralConfiguration generalConfiguration) {
         this.player = player;
         this.patternFinderGUIConfiguration = patternFinderGUIConfiguration;
         this.inventory = Bukkit.createInventory(this, 54, ChatColor.translateAlternateColorCodes('&', patternFinderGUIConfiguration.getInventoryName()));
         this.playerKicker = playerKicker;
+        this.generalConfiguration = generalConfiguration;
     }
 
     private ItemStack[] getInventoryContents() {
