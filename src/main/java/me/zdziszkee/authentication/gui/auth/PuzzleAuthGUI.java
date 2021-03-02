@@ -5,10 +5,10 @@ import me.zdziszkee.authentication.configuration.GeneralConfiguration;
 import me.zdziszkee.authentication.configuration.PuzzleAuthGUIConfiguration;
 
 import me.zdziszkee.authentication.gui.GUI;
+import me.zdziszkee.authentication.gui.space.BookGUIManager;
 import me.zdziszkee.authentication.gui.space.BookPages;
-import me.zdziszkee.authentication.utils.Coordinates;
+import me.zdziszkee.authentication.gui.space.PlayerDataCache;
 import me.zdziszkee.authentication.utils.GUIUtils;
-import me.zdziszkee.authentication.utils.SpaceUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -17,7 +17,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.Vector;
 import xyz.upperlevel.spigot.book.BookUtil;
 
 import java.util.Arrays;
@@ -33,6 +32,9 @@ public class PuzzleAuthGUI implements GUI {
     private final static Map<Integer, Integer> slotMap = new HashMap<>();
     private final PlayerKicker playerKicker;
     private final GeneralConfiguration generalConfiguration;
+    private final PlayerDataCache playerDataCache;
+    private final BookGUIManager bookGUIManager;
+    private boolean isCompleted = false;
     private final static int[] patternSlotPool = new int[]{
             18,
             19,
@@ -89,13 +91,14 @@ public class PuzzleAuthGUI implements GUI {
             -1, -1, -1, -1, -1, -1, -1, -1
     };
 
-    public PuzzleAuthGUI(Player player, PuzzleAuthGUIConfiguration puzzleAuthGUIConfiguration,PlayerKicker playerKicker,GeneralConfiguration generalConfiguration) {
+    public PuzzleAuthGUI(Player player, PuzzleAuthGUIConfiguration puzzleAuthGUIConfiguration,PlayerKicker playerKicker,GeneralConfiguration generalConfiguration, BookGUIManager bookGUIManager,PlayerDataCache playerDataCache) {
         this.player = player;
         this.puzzleAuthGUIConfiguration = puzzleAuthGUIConfiguration;
         this.inventory = Bukkit.createInventory(this, 54, ChatColor.translateAlternateColorCodes('&', puzzleAuthGUIConfiguration.getInventoryName()));
         this.playerKicker = playerKicker;
         this.generalConfiguration = generalConfiguration;
-
+        this.bookGUIManager = bookGUIManager;
+        this.playerDataCache = playerDataCache;
     }
 
     private void updateInventory() {
@@ -104,7 +107,9 @@ public class PuzzleAuthGUI implements GUI {
 
     @Override
     public void onClose(InventoryCloseEvent inventoryCloseEvent) {
-        Bukkit.getScheduler().runTaskLater(Authentication.getInstance(), this::openInventory,1);
+        if(!isCompleted) {
+            Bukkit.getScheduler().runTaskLater(Authentication.getInstance(), this::openInventory, 1);
+        }
     }
 
     @Override
@@ -115,8 +120,11 @@ public class PuzzleAuthGUI implements GUI {
         }
         if (slot ==5){
             if (isPatternCorrect()) {
+                this.isCompleted = true;
                 player.closeInventory();
-                BookUtil.openPlayer(player, BookPages.FOURTH);
+                BookUtil.openPlayer(player, BookPages.getFourthItem(player));
+                playerDataCache.getPlayerData(player.getUniqueId()).setAuthorizationComplete(true);
+                bookGUIManager.addPlayer(player);
             }else{
                 playerKicker.kickPlayer(player);
             }

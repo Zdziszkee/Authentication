@@ -6,11 +6,13 @@ import co.aikar.commands.annotation.Subcommand;
 import lombok.RequiredArgsConstructor;
 import me.zdziszkee.authentication.Authentication;
 import me.zdziszkee.authentication.configuration.GeneralConfiguration;
+import me.zdziszkee.authentication.gui.space.BookGUIManager;
 import me.zdziszkee.authentication.gui.space.BookPages;
 import me.zdziszkee.authentication.gui.space.PlayerDataCache;
 import me.zdziszkee.authentication.utils.Coordinates;
 import me.zdziszkee.authentication.utils.SpaceUtil;
 import me.zdziszkee.wyscore.api.CoreAPI;
+import me.zdziszkee.wyscore.currency.CurrencyPack;
 import me.zdziszkee.wyscore.database.service.PlayerService;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
@@ -23,6 +25,7 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 @CommandAlias("textbook")
 public class TextBookCommand extends BaseCommand {
+    private final BookGUIManager bookGUIManager;
     private final PlayerDataCache playerDataCache;
     private final GeneralConfiguration generalConfiguration;
     @Subcommand("page")
@@ -36,16 +39,24 @@ public class TextBookCommand extends BaseCommand {
         if (player == null) return;
         switch (page) {
             case 1:
-                BookUtil.openPlayer(player, BookPages.FIRST);
+                bookGUIManager.removePlayer(player);
+                BookUtil.openPlayer(player, BookPages.getFirstItem(player));
+                bookGUIManager.addPlayer(player);
                 break;
             case 2:
-                BookUtil.openPlayer(player, BookPages.SECOND);
+                bookGUIManager.removePlayer(player);
+                BookUtil.openPlayer(player, BookPages.getSecondItem(player));
+                bookGUIManager.addPlayer(player);
                 break;
             case 3:
-                BookUtil.openPlayer(player, BookPages.THIRD);
+                bookGUIManager.removePlayer(player);
+                BookUtil.openPlayer(player, BookPages.getThirdItem(player));
+                bookGUIManager.addPlayer(player);
                 break;
             case 4:
-                BookUtil.openPlayer(player, BookPages.FOURTH);
+                bookGUIManager.removePlayer(player);
+                BookUtil.openPlayer(player, BookPages.getFourthItem(player));
+                bookGUIManager.addPlayer(player);
                 break;
         }
 
@@ -66,7 +77,10 @@ public class TextBookCommand extends BaseCommand {
             playerData.setBoy(true);
         }
         playerDataCache.addPlayer(player.getUniqueId(),playerData);
-        BookUtil.openPlayer(player, BookPages.THIRD);
+        bookGUIManager.removePlayer(player);
+        BookUtil.openPlayer(player, BookPages.getThirdItem(player));
+        bookGUIManager.addPlayer(player);
+
     }
 
     @Subcommand("start")
@@ -75,7 +89,9 @@ public class TextBookCommand extends BaseCommand {
         String playerName = args[0];
         Player player = Bukkit.getPlayer(playerName);
         if (player == null) return;
+        bookGUIManager.removePlayer(player);
         CoreAPI.getPlayerService().save(player.getUniqueId(), playerDataCache.getPlayerData(player.getUniqueId()));
+        CoreAPI.getCurrencyService().save(player.getUniqueId(),new CurrencyPack(0,0,0));
         Coordinates velocity = generalConfiguration.getSpaceVelocity();
         player.setVelocity(new Vector(velocity.getX(),velocity.getY(),velocity.getZ()));
         Bukkit.getScheduler().runTaskLater(Authentication.getInstance(), () -> {

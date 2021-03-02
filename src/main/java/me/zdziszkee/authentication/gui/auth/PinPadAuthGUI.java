@@ -5,9 +5,9 @@ import me.zdziszkee.authentication.Authentication;
 import me.zdziszkee.authentication.configuration.GeneralConfiguration;
 import me.zdziszkee.authentication.configuration.PinPadAuthGUIConfiguration;
 import me.zdziszkee.authentication.gui.GUI;
+import me.zdziszkee.authentication.gui.space.BookGUIManager;
 import me.zdziszkee.authentication.gui.space.BookPages;
-import me.zdziszkee.authentication.utils.Coordinates;
-import me.zdziszkee.authentication.utils.SpaceUtil;
+import me.zdziszkee.authentication.gui.space.PlayerDataCache;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -15,7 +15,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.Vector;
 import xyz.upperlevel.spigot.book.BookUtil;
 
 import java.util.Arrays;
@@ -30,12 +29,18 @@ public class PinPadAuthGUI implements GUI {
     private final Player player;
     private final PlayerKicker playerKicker;
     private final GeneralConfiguration generalConfiguration;
-    public PinPadAuthGUI(PinPadAuthGUIConfiguration pinPadAuthGUIConfiguration, Player player,PlayerKicker playerKicker,GeneralConfiguration generalConfiguration) {
+    private final BookGUIManager bookGUIManager;
+    private final PlayerDataCache playerDataCache;
+    private boolean isCompleted = false;
+    public PinPadAuthGUI(PinPadAuthGUIConfiguration pinPadAuthGUIConfiguration, Player player,PlayerKicker playerKicker,GeneralConfiguration generalConfiguration, BookGUIManager bookGUIManager,PlayerDataCache playerDataCache
+    ) {
         this.player = player;
         this.pinPadAuthGUIConfiguration = pinPadAuthGUIConfiguration;
         this.inventory = Bukkit.createInventory(this, 54, ChatColor.translateAlternateColorCodes('&', pinPadAuthGUIConfiguration.getInventoryName()));
         this.playerKicker = playerKicker;
         this.generalConfiguration = generalConfiguration;
+        this.bookGUIManager = bookGUIManager;
+        this.playerDataCache = playerDataCache;
     }
 
     @Override
@@ -65,8 +70,12 @@ public class PinPadAuthGUI implements GUI {
             }
             int inputPin = Integer.parseInt(stringBuilder.toString());
             if (inputPin == generatedPin) {
+                this.isCompleted = true;
                 player.closeInventory();
-                BookUtil.openPlayer(player, BookPages.FOURTH);
+                playerDataCache.getPlayerData(player.getUniqueId()).setAuthorizationComplete(true);
+
+                BookUtil.openPlayer(player, BookPages.getFourthItem(player));
+                bookGUIManager.addPlayer(player);
 
             } else {
                 playerKicker.kickPlayer(player);
@@ -119,7 +128,9 @@ public class PinPadAuthGUI implements GUI {
     }
     @Override
     public void onClose(InventoryCloseEvent inventoryCloseEvent) {
-        Bukkit.getScheduler().runTaskLater(Authentication.getInstance(), this::openInventory,1);
+        if(!isCompleted) {
+            Bukkit.getScheduler().runTaskLater(Authentication.getInstance(), this::openInventory, 1);
+        }
     }
     private ItemStack[] getInventoryContents() {
         Inventory temp = Bukkit.createInventory(null, 54);

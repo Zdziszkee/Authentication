@@ -5,7 +5,9 @@ import me.zdziszkee.authentication.Authentication;
 import me.zdziszkee.authentication.configuration.GeneralConfiguration;
 import me.zdziszkee.authentication.configuration.PatternFinderAuthGUIConfiguration;
 import me.zdziszkee.authentication.gui.GUI;
+import me.zdziszkee.authentication.gui.space.BookGUIManager;
 import me.zdziszkee.authentication.gui.space.BookPages;
+import me.zdziszkee.authentication.gui.space.PlayerDataCache;
 import me.zdziszkee.authentication.utils.GUIUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -27,7 +29,10 @@ public class PatternFinderAuthGUI implements GUI {
     private final Player player;
     private final PlayerKicker playerKicker;
     private final PatternFinderAuthGUIConfiguration patternFinderGUIConfiguration;
+    private final BookGUIManager bookGUIManager;
     private final GeneralConfiguration generalConfiguration;
+    private final PlayerDataCache playerDataCache;
+    private boolean isCompleted = false;
     private final Set<Integer> generatedGreenGlassSlots = new HashSet<>();
     private final int[] inputGreenSlots = new int[]{
             -1,
@@ -38,7 +43,9 @@ public class PatternFinderAuthGUI implements GUI {
 
     @Override
     public void onClose(InventoryCloseEvent inventoryCloseEvent) {
-        Bukkit.getScheduler().runTaskLater(Authentication.getInstance(), this::openInventory,1);
+        if (!isCompleted) {
+            Bukkit.getScheduler().runTaskLater(Authentication.getInstance(), this::openInventory, 1);
+        }
     }
 
     @Override
@@ -55,8 +62,11 @@ public class PatternFinderAuthGUI implements GUI {
         }
         if (slot == 23) {
             if (isPatternCorrect()) {
+                this.isCompleted = true;
                 player.closeInventory();
-                BookUtil.openPlayer(player, BookPages.FOURTH);
+                playerDataCache.getPlayerData(player.getUniqueId()).setAuthorizationComplete(true);
+                BookUtil.openPlayer(player, BookPages.getFourthItem(player));
+                bookGUIManager.addPlayer(player);
             } else {
                 playerKicker.kickPlayer(player);
             }
@@ -75,12 +85,14 @@ public class PatternFinderAuthGUI implements GUI {
         }
     }
 
-    public PatternFinderAuthGUI(Player player, PatternFinderAuthGUIConfiguration patternFinderGUIConfiguration, PlayerKicker playerKicker,GeneralConfiguration generalConfiguration) {
+    public PatternFinderAuthGUI(Player player, PatternFinderAuthGUIConfiguration patternFinderGUIConfiguration, PlayerKicker playerKicker, GeneralConfiguration generalConfiguration,BookGUIManager bookGUIManager,PlayerDataCache playerDataCache) {
         this.player = player;
         this.patternFinderGUIConfiguration = patternFinderGUIConfiguration;
         this.inventory = Bukkit.createInventory(this, 54, ChatColor.translateAlternateColorCodes('&', patternFinderGUIConfiguration.getInventoryName()));
         this.playerKicker = playerKicker;
         this.generalConfiguration = generalConfiguration;
+        this.bookGUIManager = bookGUIManager;
+        this.playerDataCache = playerDataCache;
     }
 
     private ItemStack[] getInventoryContents() {

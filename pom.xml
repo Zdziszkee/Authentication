@@ -39,7 +39,7 @@
             <artifactId>bungeecord-api</artifactId>
             <version>1.8-SNAPSHOT</version>
             <type>jar</type>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>co.aikar</groupId>
@@ -62,26 +62,14 @@
             <groupId>me.zdziszkee.wyscore</groupId>
             <artifactId>wyscore</artifactId>
             <version>1.0</version>
-            <systemPath>${project.basedir}/lib/Wys-CORE.jar</systemPath>
+            <systemPath>${project.basedir}/Server/plugins/Wys-CORE.jar</systemPath>
             <scope>system</scope>
-            <exclusions>
-                <exclusion>  <!-- declare the exclusion here -->
-                    <groupId>com.twodevsstudio.simplejsonconfig</groupId>
-                    <artifactId>simplejsonconfig</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <version>16.0.3</version>
+            <groupId>com.github.slighterr12</groupId>
+            <artifactId>SimpleJSONConfig</artifactId>
+            <version>732225f</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.reflections</groupId>
-            <artifactId>reflections</artifactId>
-            <version>0.9.10</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

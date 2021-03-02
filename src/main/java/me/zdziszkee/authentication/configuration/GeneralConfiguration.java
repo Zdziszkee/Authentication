@@ -1,7 +1,7 @@
 package me.zdziszkee.authentication.configuration;
 
-import me.zdziszkee.authentication.gson.com.twodevsstudio.simplejsonconfig.api.Config;
-import me.zdziszkee.authentication.gson.com.twodevsstudio.simplejsonconfig.interfaces.Configuration;
+import com.twodevsstudio.simplejsonconfig.api.Config;
+import com.twodevsstudio.simplejsonconfig.interfaces.Configuration;
 import lombok.Getter;
 import me.zdziszkee.authentication.utils.Coordinates;
 
