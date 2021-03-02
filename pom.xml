@@ -50,12 +50,23 @@
             <version>1.8.8-R0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
+            <groupId>me.zdziszkee.wyscore</groupId>
+            <artifactId>wyscore</artifactId>
+            <version>1.0</version>
+            <systemPath>${project.basedir}/Server/plugins/Wys-CORE.jar</systemPath>
+            <scope>system</scope>
+        </dependency>
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.16</version>
             <scope>provided</scope>
         </dependency>
-
+        <dependency>
+            <groupId>xyz.upperlevel.spigot.book</groupId>
+            <artifactId>spigot-book-api</artifactId>
+            <version>1.4.2</version>
+        </dependency>
         <dependency>
             <groupId>com.github.slighterr12</groupId>
             <artifactId>SimpleJSONConfig</artifactId>

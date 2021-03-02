@@ -2,3 +2,5 @@ name: Authentication
 main: me.zdziszkee.authentication.Authentication
 version: 1.0
 author: Zdziszkee
+depend:
+  - WysCore

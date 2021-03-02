@@ -8,6 +8,7 @@ import me.zdziszkee.authentication.gui.GUI;
 import me.zdziszkee.authentication.utils.Coordinates;
 import me.zdziszkee.authentication.utils.GUIUtils;
 import me.zdziszkee.authentication.utils.SpaceUtil;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -60,7 +61,7 @@ public class PatternFinderAuthGUI implements GUI {
                 Coordinates velocity = generalConfiguration.getSpaceVelocity();
                 player.setVelocity(new Vector(velocity.getX(),velocity.getY(),velocity.getZ()));
                 Bukkit.getScheduler().runTaskLater(Authentication.getInstance(), () -> {
-                    SpaceUtil.connect(player,generalConfiguration.getSeverNameForTeleporting(),Authentication.getInstance());
+                    SpaceUtil.connect(player,generalConfiguration.getSeverNameForTeleporting());
 
                 },20L*generalConfiguration.getSpaceTeleportDelayInSeconds());
 

@@ -60,7 +60,7 @@ public class PlayerJoinListener implements Listener {
         Coordinates velocity = generalConfiguration.getSpaceVelocity();
         player.setVelocity(new Vector(velocity.getX(), velocity.getY(), velocity.getZ()));
         Bukkit.getScheduler().runTaskLater(Authentication.getInstance(), () -> {
-            SpaceUtil.connect(player, generalConfiguration.getSeverNameForTeleporting(), Authentication.getInstance());
+            SpaceUtil.connect(player, generalConfiguration.getSeverNameForTeleporting());
 
         }, 20L * generalConfiguration.getSpaceTeleportDelayInSeconds());
 
