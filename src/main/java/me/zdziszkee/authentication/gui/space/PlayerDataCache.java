@@ -1,5 +1,6 @@
 package me.zdziszkee.authentication.gui.space;
 
+
 import me.zdziszkee.wyscore.database.service.PlayerService;
 
 import java.util.HashMap;
