@@ -5,6 +5,7 @@ import me.zdziszkee.authentication.Authentication;
 import me.zdziszkee.authentication.configuration.GeneralConfiguration;
 import me.zdziszkee.authentication.configuration.PinPadAuthGUIConfiguration;
 import me.zdziszkee.authentication.gui.GUI;
+import me.zdziszkee.authentication.gui.space.BookPages;
 import me.zdziszkee.authentication.utils.Coordinates;
 import me.zdziszkee.authentication.utils.SpaceUtil;
 import org.bukkit.Bukkit;
@@ -15,6 +16,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
+import xyz.upperlevel.spigot.book.BookUtil;
 
 import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
@@ -64,12 +66,7 @@ public class PinPadAuthGUI implements GUI {
             int inputPin = Integer.parseInt(stringBuilder.toString());
             if (inputPin == generatedPin) {
                 player.closeInventory();
-                Coordinates velocity = generalConfiguration.getSpaceVelocity();
-                player.setVelocity(new Vector(velocity.getX(),velocity.getY(),velocity.getZ()));
-                Bukkit.getScheduler().runTaskLater(Authentication.getInstance(), () -> {
-                    SpaceUtil.connect(player,generalConfiguration.getSeverNameForTeleporting());
-
-                },20L*generalConfiguration.getSpaceTeleportDelayInSeconds());
+                BookUtil.openPlayer(player, BookPages.FOURTH);
 
             } else {
                 playerKicker.kickPlayer(player);

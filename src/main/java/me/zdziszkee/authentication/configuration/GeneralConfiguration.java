@@ -1,10 +1,9 @@
 package me.zdziszkee.authentication.configuration;
 
-import com.twodevsstudio.simplejsonconfig.api.Config;
-import com.twodevsstudio.simplejsonconfig.interfaces.Configuration;
+import me.zdziszkee.authentication.gson.com.twodevsstudio.simplejsonconfig.api.Config;
+import me.zdziszkee.authentication.gson.com.twodevsstudio.simplejsonconfig.interfaces.Configuration;
 import lombok.Getter;
 import me.zdziszkee.authentication.utils.Coordinates;
-import org.bukkit.util.Vector;
 
 
 import java.util.List;
@@ -12,7 +11,7 @@ import java.util.List;
 import static java.util.Arrays.asList;
 
 @Getter
-@Configuration(name = "generalConfiguration.json")
+@Configuration("generalConfiguration.json")
 public class GeneralConfiguration extends Config {
     private String severNameForTeleporting = "example";
     private List<String> kickMessage =  asList("&6Zostales","&7wyjebany");

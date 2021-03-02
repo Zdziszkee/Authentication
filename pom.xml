@@ -26,6 +26,10 @@
             <id>bungeecord-repo</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </repository>
+        <repository>
+            <id>aikar</id>
+            <url>https://repo.aikar.co/content/groups/aikar/</url>
+        </repository>
     </repositories>
 
 
@@ -36,6 +40,11 @@
             <version>1.8-SNAPSHOT</version>
             <type>jar</type>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>co.aikar</groupId>
+            <artifactId>acf-paper</artifactId>
+            <version>0.5.0-20170603.043155-1</version>
         </dependency>
         <dependency>
             <groupId>net.md-5</groupId>
@@ -53,8 +62,26 @@
             <groupId>me.zdziszkee.wyscore</groupId>
             <artifactId>wyscore</artifactId>
             <version>1.0</version>
-            <systemPath>${project.basedir}/Server/plugins/Wys-CORE.jar</systemPath>
+            <systemPath>${project.basedir}/lib/Wys-CORE.jar</systemPath>
             <scope>system</scope>
+            <exclusions>
+                <exclusion>  <!-- declare the exclusion here -->
+                    <groupId>com.twodevsstudio.simplejsonconfig</groupId>
+                    <artifactId>simplejsonconfig</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>16.0.3</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.10</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -66,12 +93,6 @@
             <groupId>xyz.upperlevel.spigot.book</groupId>
             <artifactId>spigot-book-api</artifactId>
             <version>1.4.2</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.slighterr12</groupId>
-            <artifactId>SimpleJSONConfig</artifactId>
-            <version>32e62403f6</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
     <build>
@@ -96,6 +117,7 @@
                             <!--Tell the shade plugin where to put our jar file-->
                             <outputFile>${project.basedir}/Server/plugins/${project.artifactId}.jar</outputFile>
                             <minimizeJar>true</minimizeJar>
+
                         </configuration>
                     </execution>
                 </executions>

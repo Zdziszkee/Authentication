@@ -1,12 +1,12 @@
 package me.zdziszkee.authentication.configuration;
 
-import com.twodevsstudio.simplejsonconfig.api.Config;
-import com.twodevsstudio.simplejsonconfig.interfaces.Configuration;
+import me.zdziszkee.authentication.gson.com.twodevsstudio.simplejsonconfig.api.Config;
+import me.zdziszkee.authentication.gson.com.twodevsstudio.simplejsonconfig.interfaces.Configuration;
 import lombok.Getter;
 import me.zdziszkee.authentication.gui.GUISkull;
 
 @Getter
-@Configuration(name = "pinpadauthgui.json")
+@Configuration("pinpadauthgui.json")
 public class PinPadAuthGUIConfiguration extends Config {
     private  String inventoryName = "example";
     private GUISkull oneNumberHead = new GUISkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDJhNmYwZTg0ZGFlZmM4YjIxYWE5OTQxNWIxNmVkNWZkYWE2ZDhkYzBjM2NkNTkxZjQ5Y2E4MzJiNTc1In19fQ==", "one", "&4lore");

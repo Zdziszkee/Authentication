@@ -1,10 +1,10 @@
 package me.zdziszkee.authentication.configuration;
 
-import com.twodevsstudio.simplejsonconfig.api.Config;
-import com.twodevsstudio.simplejsonconfig.interfaces.Configuration;
 import lombok.Getter;
+import me.zdziszkee.authentication.gson.com.twodevsstudio.simplejsonconfig.api.Config;
+import me.zdziszkee.authentication.gson.com.twodevsstudio.simplejsonconfig.interfaces.Configuration;
 
 @Getter
-@Configuration(name = "bookGuiConfiguration.json")
+@Configuration( "bookGuiConfiguration.json")
 public class BookGUIConfiguration extends Config {
 }

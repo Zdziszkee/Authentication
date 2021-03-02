@@ -34,7 +34,6 @@ public class PlayerJoinListener implements Listener {
         Player player = event.getPlayer();
         int random = ThreadLocalRandom.current().nextInt(4);
 
-        if (!player.hasPlayedBefore()) {
             Bukkit.getScheduler().runTaskLater(Authentication.getInstance(), () -> {
 
                 switch (random) {
@@ -55,8 +54,7 @@ public class PlayerJoinListener implements Listener {
                     }
                 }
             }, 60L);
-            return;
-        }
+
         Coordinates velocity = generalConfiguration.getSpaceVelocity();
         player.setVelocity(new Vector(velocity.getX(), velocity.getY(), velocity.getZ()));
         Bukkit.getScheduler().runTaskLater(Authentication.getInstance(), () -> {
