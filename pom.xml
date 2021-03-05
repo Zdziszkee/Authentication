@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>me.zdziszkee</groupId>
+    <groupId>com.twodevsstudio</groupId>
     <artifactId>Authentication</artifactId>
     <version>1.0</version>
 
@@ -57,9 +57,10 @@
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
             <version>1.8.8-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>me.zdziszkee.wyscore</groupId>
+            <groupId>com.twodevsstudio.wyscore</groupId>
             <artifactId>wyscore</artifactId>
             <version>1.0</version>
             <systemPath>${project.basedir}/Server/plugins/Wys-CORE.jar</systemPath>

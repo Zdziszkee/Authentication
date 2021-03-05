@@ -1,6 +1,6 @@
 name: Authentication
-main: me.zdziszkee.authentication.Authentication
+main: com.twodevsstudio.authentication.Authentication
 version: 1.0
-author: Zdziszkee
+author: TwoDevsstudio
 depend:
   - WysCore
