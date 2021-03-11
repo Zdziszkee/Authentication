@@ -67,6 +67,7 @@ public static ItemStack getThirdItem(Player player){
             .add(BookUtil.TextBuilder.of("- ").style(ChatColor.BOLD).color(ChatColor.BLACK).build())
             .add(BookUtil.TextBuilder.of("Start my journey").color(ChatColor.LIGHT_PURPLE).style(ChatColor.BOLD).onClick(BookUtil.ClickAction.runCommand("/textbook start "+player.getName())).onHover(BookUtil.HoverAction.showText(ChatColor.GRAY + "Don't worry! You may return and choose your gender")).build())
             .newLine()
+            .newLine()
             .add(BookUtil.TextBuilder.of("- ").style(ChatColor.BOLD).color(ChatColor.BLACK).build())
             .add(BookUtil.TextBuilder.of("Click to reset").color(ChatColor.RED).style(ChatColor.BOLD).onClick(BookUtil.ClickAction.runCommand("/textbook page "+player.getName() + " 2")).onHover(BookUtil.HoverAction.showText(ChatColor.GRAY + "Don't worry! You may return and choose your gender"))
                     .build()

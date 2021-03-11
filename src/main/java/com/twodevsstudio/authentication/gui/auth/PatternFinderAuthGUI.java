@@ -4,11 +4,11 @@ package com.twodevsstudio.authentication.gui.auth;
 import com.twodevsstudio.authentication.configuration.GeneralConfiguration;
 import com.twodevsstudio.authentication.configuration.PatternFinderAuthGUIConfiguration;
 import com.twodevsstudio.authentication.gui.space.BookPages;
-import com.twodevsstudio.authentication.gui.space.PlayerDataCache;
 import com.twodevsstudio.authentication.utils.GUIUtils;
 import com.twodevsstudio.authentication.Authentication;
 import com.twodevsstudio.authentication.gui.GUI;
 import com.twodevsstudio.authentication.gui.space.BookGUIManager;
+import com.twodevsstudio.wyscore.database.service.PlayerService;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -31,7 +31,7 @@ public class PatternFinderAuthGUI implements GUI {
     private final PatternFinderAuthGUIConfiguration patternFinderGUIConfiguration;
     private final BookGUIManager bookGUIManager;
     private final GeneralConfiguration generalConfiguration;
-    private final PlayerDataCache playerDataCache;
+    private final PlayerService.PlayerData playerData;
     private boolean isCompleted = false;
     private final Set<Integer> generatedGreenGlassSlots = new HashSet<>();
     private final int[] inputGreenSlots = new int[]{
@@ -64,7 +64,7 @@ public class PatternFinderAuthGUI implements GUI {
             if (isPatternCorrect()) {
                 this.isCompleted = true;
                 player.closeInventory();
-                playerDataCache.getPlayerData(player.getUniqueId()).setAuthorizationComplete(true);
+              playerData.setAuthorizationComplete(true);
                 BookUtil.openPlayer(player, BookPages.getFourthItem(player));
                 bookGUIManager.addPlayer(player);
             } else {
@@ -85,14 +85,14 @@ public class PatternFinderAuthGUI implements GUI {
         }
     }
 
-    public PatternFinderAuthGUI(Player player, PatternFinderAuthGUIConfiguration patternFinderGUIConfiguration, PlayerKicker playerKicker, GeneralConfiguration generalConfiguration,BookGUIManager bookGUIManager,PlayerDataCache playerDataCache) {
+    public PatternFinderAuthGUI(Player player, PatternFinderAuthGUIConfiguration patternFinderGUIConfiguration, PlayerKicker playerKicker, GeneralConfiguration generalConfiguration,BookGUIManager bookGUIManager,PlayerService.PlayerData playerData) {
         this.player = player;
         this.patternFinderGUIConfiguration = patternFinderGUIConfiguration;
         this.inventory = Bukkit.createInventory(this, 54, ChatColor.translateAlternateColorCodes('&', patternFinderGUIConfiguration.getInventoryName()));
         this.playerKicker = playerKicker;
         this.generalConfiguration = generalConfiguration;
         this.bookGUIManager = bookGUIManager;
-        this.playerDataCache = playerDataCache;
+        this.playerData = playerData;
     }
 
     private ItemStack[] getInventoryContents() {

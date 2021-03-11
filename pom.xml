@@ -63,7 +63,7 @@
             <groupId>com.twodevsstudio.wyscore</groupId>
             <artifactId>wyscore</artifactId>
             <version>1.0</version>
-            <systemPath>${project.basedir}/Server/plugins/Wys-CORE.jar</systemPath>
+            <systemPath>${project.basedir}/lib/Wys-CORE.jar</systemPath>
             <scope>system</scope>
         </dependency>
         <dependency>
@@ -104,7 +104,7 @@
                         <!--Tell the shade plugin which of it's goals to attempt to run during this phase-->
                         <configuration>
                             <!--Tell the shade plugin where to put our jar file-->
-                            <outputFile>${project.basedir}/Server/plugins/${project.artifactId}.jar</outputFile>
+                            <outputFile>C:\Users\Zdziszkee\Desktop\debug_servers\spigot_1.8.8\plugins\${project.artifactId}.jar</outputFile>
                             <minimizeJar>true</minimizeJar>
 
                         </configuration>

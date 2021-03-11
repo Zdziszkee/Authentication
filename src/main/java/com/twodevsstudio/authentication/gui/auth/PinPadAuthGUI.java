@@ -6,8 +6,8 @@ import com.twodevsstudio.authentication.configuration.GeneralConfiguration;
 import com.twodevsstudio.authentication.configuration.PinPadAuthGUIConfiguration;
 import com.twodevsstudio.authentication.gui.GUI;
 import com.twodevsstudio.authentication.gui.space.BookPages;
-import com.twodevsstudio.authentication.gui.space.PlayerDataCache;
 import com.twodevsstudio.authentication.gui.space.BookGUIManager;
+import com.twodevsstudio.wyscore.database.service.PlayerService;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -30,9 +30,9 @@ public class PinPadAuthGUI implements GUI {
     private final PlayerKicker playerKicker;
     private final GeneralConfiguration generalConfiguration;
     private final BookGUIManager bookGUIManager;
-    private final PlayerDataCache playerDataCache;
+    private final PlayerService.PlayerData playerData;
     private boolean isCompleted = false;
-    public PinPadAuthGUI(PinPadAuthGUIConfiguration pinPadAuthGUIConfiguration, Player player,PlayerKicker playerKicker,GeneralConfiguration generalConfiguration, BookGUIManager bookGUIManager,PlayerDataCache playerDataCache
+    public PinPadAuthGUI(PinPadAuthGUIConfiguration pinPadAuthGUIConfiguration, Player player,PlayerKicker playerKicker,GeneralConfiguration generalConfiguration, BookGUIManager bookGUIManager,PlayerService.PlayerData playerData
     ) {
         this.player = player;
         this.pinPadAuthGUIConfiguration = pinPadAuthGUIConfiguration;
@@ -40,7 +40,7 @@ public class PinPadAuthGUI implements GUI {
         this.playerKicker = playerKicker;
         this.generalConfiguration = generalConfiguration;
         this.bookGUIManager = bookGUIManager;
-        this.playerDataCache = playerDataCache;
+        this.playerData = playerData;
     }
 
     @Override
@@ -72,7 +72,7 @@ public class PinPadAuthGUI implements GUI {
             if (inputPin == generatedPin) {
                 this.isCompleted = true;
                 player.closeInventory();
-                playerDataCache.getPlayerData(player.getUniqueId()).setAuthorizationComplete(true);
+                playerData.setAuthorizationComplete(true);
 
                 BookUtil.openPlayer(player, BookPages.getFourthItem(player));
                 bookGUIManager.addPlayer(player);

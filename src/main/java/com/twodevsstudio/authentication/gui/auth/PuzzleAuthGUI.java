@@ -3,12 +3,12 @@ package com.twodevsstudio.authentication.gui.auth;
 import com.twodevsstudio.authentication.configuration.GeneralConfiguration;
 import com.twodevsstudio.authentication.configuration.PuzzleAuthGUIConfiguration;
 import com.twodevsstudio.authentication.gui.space.BookPages;
-import com.twodevsstudio.authentication.gui.space.PlayerDataCache;
 import com.twodevsstudio.authentication.utils.GUIUtils;
 import com.twodevsstudio.authentication.Authentication;
 
 import com.twodevsstudio.authentication.gui.GUI;
 import com.twodevsstudio.authentication.gui.space.BookGUIManager;
+import com.twodevsstudio.wyscore.database.service.PlayerService;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -32,7 +32,7 @@ public class PuzzleAuthGUI implements GUI {
     private final static Map<Integer, Integer> slotMap = new HashMap<>();
     private final PlayerKicker playerKicker;
     private final GeneralConfiguration generalConfiguration;
-    private final PlayerDataCache playerDataCache;
+    private final PlayerService.PlayerData playerData;
     private final BookGUIManager bookGUIManager;
     private boolean isCompleted = false;
     private final static int[] patternSlotPool = new int[]{
@@ -91,14 +91,14 @@ public class PuzzleAuthGUI implements GUI {
             -1, -1, -1, -1, -1, -1, -1, -1
     };
 
-    public PuzzleAuthGUI(Player player, PuzzleAuthGUIConfiguration puzzleAuthGUIConfiguration,PlayerKicker playerKicker,GeneralConfiguration generalConfiguration, BookGUIManager bookGUIManager,PlayerDataCache playerDataCache) {
+    public PuzzleAuthGUI(Player player, PuzzleAuthGUIConfiguration puzzleAuthGUIConfiguration,PlayerKicker playerKicker,GeneralConfiguration generalConfiguration, BookGUIManager bookGUIManager,PlayerService.PlayerData playerData) {
         this.player = player;
         this.puzzleAuthGUIConfiguration = puzzleAuthGUIConfiguration;
         this.inventory = Bukkit.createInventory(this, 54, ChatColor.translateAlternateColorCodes('&', puzzleAuthGUIConfiguration.getInventoryName()));
         this.playerKicker = playerKicker;
         this.generalConfiguration = generalConfiguration;
         this.bookGUIManager = bookGUIManager;
-        this.playerDataCache = playerDataCache;
+        this.playerData = playerData;
     }
 
     private void updateInventory() {
@@ -123,7 +123,7 @@ public class PuzzleAuthGUI implements GUI {
                 this.isCompleted = true;
                 player.closeInventory();
                 BookUtil.openPlayer(player, BookPages.getFourthItem(player));
-                playerDataCache.getPlayerData(player.getUniqueId()).setAuthorizationComplete(true);
+                playerData.setAuthorizationComplete(true);
                 bookGUIManager.addPlayer(player);
             }else{
                 playerKicker.kickPlayer(player);
